@@ -31,17 +31,23 @@ echo "HF Cache:   $HF_CACHE_HOST"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 
-# ---- Build image if not exists ----
-if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
-  echo "Building image $IMAGE_NAME..."
-  docker build \
+docker build --no-cache \
     --build-arg UID="$(id -u ${USER_NAME})" \
     --build-arg GID="$(id -g ${USER_NAME})" \
     --build-arg USER_NAME="${USER_NAME}" \
     -t "$IMAGE_NAME" .
-else
-  echo "Image $IMAGE_NAME already exists."
-fi
+
+# ---- Build image if not exists ----
+# if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+#   echo "Building image $IMAGE_NAME..."
+#   docker build \
+#     --build-arg UID="$(id -u ${USER_NAME})" \
+#     --build-arg GID="$(id -g ${USER_NAME})" \
+#     --build-arg USER_NAME="${USER_NAME}" \
+#     -t "$IMAGE_NAME" .
+# else
+#   echo "Image $IMAGE_NAME already exists."
+# fi
 
 # ---- Ensure cache dirs exist on host ----
 mkdir -p "$HF_CACHE_HOST"/{hub,transformers,xdg,datasets}
@@ -102,6 +108,15 @@ docker exec "$CONTAINER_NAME" bash -lc "
   chmod 600 /home/$USER_NAME/.ssh/* || true
 "
 echo "Successfully changed the file permissions of docker .ssh directories"
+
+# ---- Kaggle keys copy ---
+echo "Copying kaggle keys into container...."
+docker exec "$CONTAINER_NAME" mkdir -p "/home/$USER_NAME/.kaggle"
+docker cp "/home/$USER_NAME/.kaggle/kaggle.json" "$CONTAINER_NAME":/home/$USER_NAME/.kaggle/kaggle.json
+docker exec "$CONTAINER_NAME" chown -R $USER_NAME:$USER_NAME "/home/$USER_NAME/.kaggle"
+docker exec "$CONTAINER_NAME" chmod 600 "/home/$USER_NAME/.kaggle/kaggle.json"
+docker exec "$CONTAINER_NAME" bash -c \
+"grep -q 'local/bin' ~/.bashrc || echo 'export PATH=\$PATH:/home/$USER_NAME/.local/bin' >> ~/.bashrc"
 
 # ---- Cleanup bad container-layer caches (CRITICAL) ----
 docker exec "$CONTAINER_NAME" bash -lc "

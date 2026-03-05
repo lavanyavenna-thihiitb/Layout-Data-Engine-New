@@ -23,6 +23,7 @@ RUN apt-get update && \
         tmux \
         python3.10-venv \
         sudo \
+        tree \
         wget && \
     ln -fs /usr/share/zoneinfo/$TZ /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
