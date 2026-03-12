@@ -8,7 +8,7 @@ CONTAINER_NAME="layout-data-engine-new-${USER_NAME}"
 
 # Python Environment Path (HOST path - full path on the server)
 # This will be split into: Directory (for Docker mount) and Name (for init_env.sh inside container)
-ENV_PATH="/home/${USER_NAME}/Environments/layout_data_engine_env"
+ENV_PATH="/home/${USER_NAME}/Environments/layout_data_engine_env_new"
 
 # Option 2: Shared environment for all users (uncomment to use)
 # ENV_PATH="/home/shared_environments/layout_data_engine_env"

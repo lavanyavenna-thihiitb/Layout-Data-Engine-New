@@ -3,3 +3,22 @@
 
 #Ignore datasets
 /dataset/*
+
+#Ignore .vscode
+.vscode/
+
+#Ignore dependencies
+dependencies/*
+
+#Ignore json_outputs_new
+json_outputs_new/*
+
+#Ignore src/layout
+src/layout_detection_new.egg-info/*
+src/layout_detection_new_1.egg-info/*
+
+#Ignore tests
+tests/*
+
+#Ignore visual_outputs
+visual_outputs/*
