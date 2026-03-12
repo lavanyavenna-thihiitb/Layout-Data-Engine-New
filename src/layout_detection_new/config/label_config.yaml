@@ -1,0 +1,13 @@
+label_colors:
+  Text:        "#1F77B4"
+  Table:       "#FF7F0E"
+  Caption:     "#2CA02C"
+  Picture:     "#D62728"
+  Figure:      "#9467BD"
+  Title:       "#8C564B"
+  Section:     "#E377C2"
+  List:        "#7F7F7F"
+  Formula:     "#BCBD22"
+  Page-header: "#17BECF"
+  Page-footer: "#AEC7E8"
+  default:     "#AAAAAA"

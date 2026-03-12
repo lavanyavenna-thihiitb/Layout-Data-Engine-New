@@ -44,6 +44,8 @@ else
   "${ENV_PATH}/bin/pip" install psutil nvitop pydantic ipython
   "${ENV_PATH}/bin/pip" install -U selenium
   "${ENV_PATH}/bin/pip" install beautifulsoup4
+  "${ENV_PATH}/bin/pip" install surya-ocr
+  "${ENV_PATH}/bin/pip" install pillow
   # "${ENV_PATH}/bin/pip" install torch==2.9.0 torchvision==0.24.0 torchaudio==2.9.0 --index-url https://download.pytorch.org/whl/cu126 
   "${ENV_PATH}/bin/pip" install vllm
   "${ENV_PATH}/bin/pip" install flash-attn --no-build-isolation

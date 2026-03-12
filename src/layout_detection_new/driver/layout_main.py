@@ -1,24 +1,24 @@
 import argparse
 from pathlib import Path
 import logging
-from utils import iterate_image_paths, check_for_output, create_batches
+from layout_detection_new.utils import *
+from layout_detection_new.detectors import SuryaModel
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(name)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+log = logging.getLogger("layout_detection_surya")
 
 def cli():
-
-    log = logging.getLogger("layout_detection_surya")
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s %(levelname)s %(name)s: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
 
     parser = argparse.ArgumentParser(description="Layout Detection with surya")
 
     parser.add_argument("--root",
                         type=Path,
                         required=True,
-                        default=Path("dataset/bank_statments/raw/images"),
-                        help="Path to directory consisting images")
+                        help="Path to directory consisting images like - dataset/bank_statments/raw/images")
 
     parser.add_argument("--model_for_detection",
                         type=str,
@@ -32,11 +32,12 @@ def cli():
     
     parser.add_argument("--layout_dir",
                         type=Path,
-                        default="outputs/",
+                        default=Path("json_outputs_ids/"),
                         help="Save layout detections in json format.")
     
     parser.add_argument("--save_visualizations",
-                        type=str,
+                        type=Path,
+                        default=Path("visual_outputs_ids/"),
                         help="Path to save visualizations of the model")
     
     args = parser.parse_args()
@@ -54,11 +55,17 @@ def cli():
         return
     
     batches = create_batches(images_to_process, args.batch_size)
-   
-        
-    
+    log.info("Batches created, starting layout detection......")
 
+    if args.model_for_detection == "surya":
+        model = SuryaModel()
+        model.load_model()
+        model.layout_detection(batches, args.layout_dir, args.save_visualizations)
+    
+    log.info(f"Successfully finished processing images in {args.root}")
 
 
 if __name__ == "__main__":
+    print(f"Initiating Layout Detection ......")
+    log.info("Initiating Layout detection........")
     cli()
